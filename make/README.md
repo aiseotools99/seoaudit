@@ -1,88 +1,207 @@
-# SEOWebChecker - Make.com (Integromat) Custom App Integration
+# SEOWebChecker — Make.com Custom App Integration
 
 [![Platform](https://img.shields.io/badge/Platform-seowebchecker.com-brightgreen)](https://seowebchecker.com/)
 [![Make Integration](https://img.shields.io/badge/Make.com-Custom%20App-purple.svg)](https://www.make.com/en/integrations)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official [Make.com](https://www.make.com/) (formerly Integromat) custom application for **SEOWebChecker**. Connects technical SEO audits and automated regression alerts directly into visual workflows across thousands of Make apps (Slack, Notion, Google Sheets, Airtable, HubSpot, Telegram, and Email).
+Official [Make.com](https://www.make.com/) (formerly Integromat) custom application for **SEOWebChecker**. Connects real-time technical SEO audits, diagnostic issues, and regression alerts directly into automated visual scenarios across thousands of applications (Slack, Google Sheets, Airtable, Notion, Email, Webhooks, etc.).
 
-Powered by the [SEOWebChecker](https://seowebchecker.com/) platform.
-
----
-
-## ⚡ Module Features
-
-### Action: `Run Technical SEO Audit`
-- **Purpose**: Audits any target webpage URL in real time.
-- **Parameters**:
-  - `url` (Text, Required): Full webpage URL to inspect.
-  - `alertThreshold` (Number, Optional): Alert score threshold (default: 85).
-- **Returned Metrics**:
-  - `score`: Technical SEO health score (0–100).
-  - `grade`: Letter grade (`A+` through `F`).
-  - `status`: `PASS` or `ALERT`.
-  - `isAlert`: Boolean flag indicating if score fell below threshold.
-  - `title`: Title tag & length audit.
-  - `metaDescription`: Meta description length & truncation checks.
-  - `issuesCount` & `issues`: Detailed list of detected SEO issues.
-  - `passesCount` & `passes`: List of passed checks.
-  - `auditedAt`: ISO timestamp.
-  - `platformUrl`: `https://seowebchecker.com/`.
+Powered by [SEOWebChecker](https://seowebchecker.com/).
 
 ---
 
-## 🚀 How to Build & Publish on Make.com
+## 📋 Architecture & Review Fixes Summary
 
-### Step 1: Open Make Developer Hub
-1. Log in to your account at **[make.com](https://www.make.com/)**.
-2. In the left navigation bar, click **Developer** -> **My Apps** (or visit [make.com/en/developer](https://www.make.com/en/developer)).
-3. Click **Create a new app**:
-   - **App name**: `SEOWebChecker`
-   - **App label**: `SEOWebChecker`
-   - **Description**: `Real-time technical SEO auditing engine that validates on-page HTML, headings, meta tags, and mobile readiness with automated alerts.`
-   - **Theme color**: `#10B981` (Emerald Green)
-   - **Language**: English
-
----
-
-### Step 2: Configure the App Base & Connection
-1. In the **Base** settings tab:
-   - **Base URL**: `https://seowebchecker.com/`
-2. In the **Connections** tab:
-   - Click **Add Connection** -> Type: **API Key** (or leave as direct HTTP if using public auditing).
+This custom app adheres strictly to the Make Apps DX guidelines and addresses all review requirements:
+1. **Live Hosted API Integration**: Replaced mockup responses with live HTTP calls against the SEOWebChecker production REST API at `https://seowebchecker.com/api/v1`.
+2. **Production Base Configuration**: Configured `baseUrl` to `https://seowebchecker.com/api/v1`, dynamic `Authorization: Bearer {{connection.apiKey}}` and `X-API-Key: {{connection.apiKey}}` headers, and structured error handling for `{{body.message}}` and `{{body.error}}`.
+3. **API Key Connection**: Implemented a secure connection component that validates credentials against `GET /audits?limit=1`.
+4. **Matched Interface & Dynamic Threshold**: Output bundle matches all fields returned by the live API; `isAlert` and `status` evaluate dynamically against `parameters.alertThreshold`; `timestamp` is parsed with `parseDate`.
+5. **Typed Diagnostics (`issues` & `passes`)**: Structured as arrays with nested collection specs (`id`, `category`, `severity`, `title`, `message`, `recommendation`).
+6. **Universal Module**: Implemented the required "Make an API call" (`apiCall`) module for arbitrary relative API requests.
+7. **Sentence-Case Formatting**: Module labels, groups (`Audits` and `Other`), parameters, and interface fields conform to Make style conventions.
 
 ---
 
-### Step 3: Add the "Run Technical SEO Audit" Module
-1. Under **Modules**, click **Add Module**:
-   - **Type**: `Action`
-   - **Name**: `runAudit`
-   - **Label**: `Run Technical SEO Audit`
-   - **Description**: `Audits a webpage URL for technical SEO issues, returning scores, grades, and diagnostics.`
-2. **Parameters**:
-   - In the **Mappable Parameters** tab, paste the JSON from [`make/modules/run_audit_parameters.json`](modules/run_audit_parameters.json).
-3. **Interface**:
-   - In the **Interface** tab, paste the JSON from [`make/modules/run_audit_interface.json`](modules/run_audit_interface.json).
-4. **Samples**:
-   - In the **Samples** tab, paste the JSON from [`make/modules/run_audit_samples.json`](modules/run_audit_samples.json).
-5. Click **Save**.
+## 🛠️ App Specification & Components
+
+### 1. Base Configuration (`base.imljson`)
+- **Base URL**: `https://seowebchecker.com/api/v1`
+- **Headers**:
+  ```json
+  {
+    "Authorization": "Bearer {{connection.apiKey}}",
+    "X-API-Key": "{{connection.apiKey}}",
+    "User-Agent": "SEOWebChecker-Make-App/1.0.0 (+https://seowebchecker.com/)"
+  }
+  ```
+- **Error Handling**:
+  ```json
+  {
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{ifempty(body.message, body.error, 'An unexpected error occurred while communicating with the SEOWebChecker API.')}}"
+      }
+    }
+  }
+  ```
 
 ---
 
-### Step 4: Test in a Scenario
-1. Go to **Scenarios** in Make.
-2. Click **Create a new scenario**.
-3. Click the **+** button and search for **SEOWebChecker**.
-4. Select **Run Technical SEO Audit**, enter `https://seowebchecker.com/`, and click **Run once**.
-5. Inspect the output bubble to confirm all scores and diagnostic metrics load successfully.
+### 2. Connection (`connections/apiKey`)
+- **Name**: `seowebcheckerApiKey`
+- **Label**: `SEOWebChecker API key`
+- **Type**: `apiKey`
+- **Parameters (`parameters.imljson`)**:
+  ```json
+  [
+    {
+      "name": "apiKey",
+      "type": "text",
+      "label": "API key",
+      "required": true,
+      "help": "Enter your SEOWebChecker API key. You can obtain or generate your key from your SEOWebChecker account at https://seowebchecker.com/."
+    }
+  ]
+  ```
+- **Communication (`api.imljson`)**:
+  ```json
+  {
+    "url": "/audits?limit=1",
+    "method": "GET",
+    "headers": {
+      "Authorization": "Bearer {{parameters.apiKey}}",
+      "X-API-Key": "{{parameters.apiKey}}",
+      "User-Agent": "SEOWebChecker-Make-App/1.0.0 (+https://seowebchecker.com/)"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{ifempty(body.message, body.error, 'Invalid API key or unauthorized access.')}}"
+      }
+    }
+  }
+  ```
 
 ---
 
-### Step 5: Invite Users & Publish to Make Directory
-1. **Private Sharing**:
-   - Under your app's **Settings** -> **Invitations**, generate a public invite link. Anyone with this link can immediately add SEOWebChecker to their Make scenarios!
-2. **Public Directory Publishing**:
-   - Under the **Publishing** tab, submit SEOWebChecker for review by the Make Partner Team to be listed in the official [Make App Directory](https://www.make.com/en/integrations).
+### 3. Module: `Run a technical SEO audit`
+- **Name**: `seoaudit` (or `runAudit`)
+- **Label**: `Run a technical SEO audit`
+- **Type**: `Action`
+- **Group**: `Audits`
+- **Description**: `Performs a real-time technical SEO audit for a target webpage URL, returning health scores, diagnostic issues, and threshold alerts.`
+
+#### Parameters (`expect.imljson`)
+```json
+[
+  {
+    "name": "url",
+    "type": "url",
+    "label": "Webpage URL",
+    "required": true,
+    "help": "Enter the full webpage URL to audit (e.g. https://example.com/)."
+  },
+  {
+    "name": "alertThreshold",
+    "type": "uinteger",
+    "label": "Alert score threshold",
+    "required": false,
+    "default": 85,
+    "min": 0,
+    "max": 100,
+    "help": "Trigger an alert flag if the technical SEO score drops below this number (0-100)."
+  }
+]
+```
+
+#### API Communication (`api.imljson`)
+```json
+{
+  "url": "/audit",
+  "method": "POST",
+  "body": {
+    "url": "{{parameters.url}}"
+  },
+  "response": {
+    "output": {
+      "id": "{{body.id}}",
+      "targetUrl": "{{body.url}}",
+      "score": "{{ifempty(body.score.overall, body.score)}}",
+      "grade": "{{ifempty(body.score.grade, body.grade)}}",
+      "status": "{{if(ifempty(body.score.overall, body.score) < parameters.alertThreshold; 'ALERT'; 'PASS')}}",
+      "isAlert": "{{ifempty(body.score.overall, body.score) < parameters.alertThreshold}}",
+      "title": "{{body.title}}",
+      "metaDescription": "{{body.metaDescription}}",
+      "issuesCount": "{{ifempty(body.stats.errors + body.stats.warnings, length(body.issues))}}",
+      "issues": "{{body.issues}}",
+      "passesCount": "{{ifempty(body.stats.passed, length(body.passes))}}",
+      "passes": "{{body.passes}}",
+      "auditedAt": "{{parseDate(body.timestamp; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}",
+      "platformUrl": "https://seowebchecker.com/"
+    }
+  }
+}
+```
+
+#### Interface (`interface.imljson`)
+See [`modules/seoaudit/interface.imljson`](modules/seoaudit/interface.imljson) for the full 14-field specification including typed array collections for `issues` and `passes`.
+
+---
+
+### 4. Module: `Make an API call` (Universal Module)
+- **Name**: `apiCall`
+- **Label**: `Make an API call`
+- **Type**: `rest`
+- **Group**: `Other`
+- **Description**: `Performs an arbitrary authorized API call to the SEOWebChecker API.`
+
+#### Parameters (`expect.imljson`)
+- `url` (Text, Required): Relative endpoint path (e.g. `/audit`, `/audits`).
+- `method` (Select, Required): `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`.
+- `headers` (Collection, Optional): Additional HTTP request headers.
+- `qs` (Collection, Optional): Query string parameters.
+- `body` (Any, Optional): Request payload body.
+
+---
+
+## 📡 Hosted API Reference Documentation
+
+- **Base URL**: `https://seowebchecker.com/api/v1`
+- **Authentication**: Bearer Token or Header key:
+  - `Authorization: Bearer <API_KEY>`
+  - `X-API-Key: <API_KEY>`
+- **Endpoints**:
+  - `POST /audit`: Execute an audit on a target webpage (`{"url": "https://example.com/"}`).
+  - `GET /audit/:id`: Retrieve single audit results by audit ID.
+  - `GET /audits?limit=10`: Retrieve historical audit records.
+- **Error Response Format**:
+  ```json
+  {
+    "statusCode": 400,
+    "error": "Bad Request",
+    "message": "Invalid webpage URL provided or target unreachable."
+  }
+  ```
+
+---
+
+## 🧪 Testing Scenarios for Make Reviewers
+
+To verify approval in Make Developer Console:
+1. **Scenario 1 — Successful Audit**:
+   - Add module **Run a technical SEO audit**.
+   - Input: URL = `https://seowebchecker.com/`, Alert score threshold = `85`.
+   - Run Once: Verify score (e.g. 96), grade (`A+`), status (`PASS`), `isAlert: false`, populated `passes` array, and parsed ISO `auditedAt`.
+2. **Scenario 2 — Threshold Alert Test**:
+   - Input: URL = `https://seowebchecker.com/`, Alert score threshold = `99`.
+   - Run Once: Verify `status` switches to `ALERT` and `isAlert: true`.
+3. **Scenario 3 — Error Test**:
+   - Provide an invalid URL (e.g. `invalid://not-a-domain`).
+   - Run Once: Verify scenario halts with `[400] Invalid webpage URL provided`.
+4. **Scenario 4 — Universal Module**:
+   - Add module **Make an API call**.
+   - Input: URL = `/audits?limit=1`, Method = `GET`.
+   - Run Once: Verify `statusCode: 200` with headers and body bundle.
 
 ---
 

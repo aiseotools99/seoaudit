@@ -1,17 +1,19 @@
 [
   {
     "name": "url",
-    "type": "text",
+    "type": "url",
     "label": "Webpage URL",
     "required": true,
-    "help": "The full URL of the webpage to audit (e.g. https://example.com/)."
+    "help": "Enter the full webpage URL to audit (e.g. https://example.com/)."
   },
   {
     "name": "alertThreshold",
-    "type": "number",
-    "label": "Alert Score Threshold",
+    "type": "uinteger",
+    "label": "Alert score threshold",
     "required": false,
     "default": 85,
-    "help": "Trigger an alert flag if the SEO score drops below this number (0-100). Default is 85."
+    "min": 0,
+    "max": 100,
+    "help": "Trigger an alert flag if the technical SEO score drops below this number (0-100)."
   }
 ]
