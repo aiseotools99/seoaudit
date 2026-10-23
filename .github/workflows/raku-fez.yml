@@ -32,16 +32,13 @@ jobs:
       - name: Install Fez Distribution Manager
         run: zef install fez
 
-      - name: Review Distribution
+      - name: Publish to Raku.land (Fez)
         run: |
-          cd raku
-          fez review
+          if [ -z "$FEZ_KEY" ]; then
+            echo "::warning::FEZ_KEY secret is not set in GitHub repository secrets. Skipping Fez upload to raku.land."
+            exit 0
+          fi
 
-      - name: Configure Fez Credentials & Publish to Raku.land
-        if: env.FEZ_KEY != ''
-        env:
-          FEZ_KEY: ${{ secrets.FEZ_KEY }}
-        run: |
           mkdir -p ~/.fez
           cat << EOF > ~/.fez-config.json
           {
@@ -54,4 +51,5 @@ jobs:
           chmod 600 ~/.fez-config.json ~/.fez/config.json
           export FEZ_CONFIG=~/.fez-config.json
           cd raku
+          fez review
           fez upload
