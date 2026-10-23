@@ -18,6 +18,7 @@
 [![CocoaPods](https://img.shields.io/cocoapods/v/SeoWebChecker.svg)](https://cocoapods.org/pods/SeoWebChecker)
 [![Swift Package Index](https://img.shields.io/badge/Swift%20Package%20Index-SeoWebChecker-FA7343.svg)](https://swiftpackageindex.com/jaiganesh6999/seowebchecker-seoaudit-sdk)
 [![Bower](https://img.shields.io/badge/Bower-seowebchecker-FFCC29.svg)](https://bower.io)
+[![PureScript](https://img.shields.io/badge/PureScript-seowebchecker-1D222D.svg?logo=purescript)](https://pursuit.purescript.org/)
 [![Yarn](https://img.shields.io/badge/Yarn-seowebchecker--seoaudit--sdk-2C8EBB.svg)](https://yarnpkg.com/package/seowebchecker-seoaudit-sdk)
 [![Vite Plugin](https://img.shields.io/badge/Vite-vite--plugin--seowebchecker-646CFF.svg)](https://www.npmjs.com/package/vite-plugin-seowebchecker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/seowebchecker/seoaudit-sdk.svg)](https://hub.docker.com/r/seowebchecker/seoaudit-sdk)
@@ -31,6 +32,18 @@
 [![Launchpad PPA](https://img.shields.io/badge/Launchpad%20PPA-seowebchecker-F8C300.svg?logo=ubuntu)](https://launchpad.net/~seoaitools/+archive/ubuntu/seowebchecker)
 [![FreeBSD Port](https://img.shields.io/badge/FreeBSD%20Port-seowebchecker-AB2B28.svg?logo=freebsd)](https://github.com/freebsd/freebsd-ports/pull/628)
 [![MCP Server](https://img.shields.io/badge/MCP%20Server-seowebchecker-6B46C1.svg?logo=anthropic)](https://smithery.ai)
+[![VS Code Extension](https://img.shields.io/badge/VS%20Code-seowebchecker-007ACC.svg?logo=visualstudiocode)](./vscode)
+[![WordPress Plugin](https://img.shields.io/badge/WordPress-seowebchecker-21759B.svg?logo=wordpress)](./wordpress)
+[![Astro Integration](https://img.shields.io/badge/Astro-astro--seowebchecker-FF5D01.svg?logo=astro)](https://www.npmjs.com/package/astro-seowebchecker)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/seowebchecker)](https://artifacthub.io/)
+[![Drupal Module](https://img.shields.io/badge/Drupal-seowebchecker-0678BE.svg?logo=drupal&logoColor=white)](./drupal)
+[![StackBlitz](https://img.shields.io/badge/StackBlitz-Open%20in%20WebContainer-1389FD.svg?logo=stackblitz)](https://stackblitz.com/github/jaiganesh6999/seowebchecker-seoaudit-sdk/tree/main/examples/stackblitz)
+[![CodeSandbox](https://img.shields.io/badge/CodeSandbox-Open%20in%20Cloud-151515.svg?logo=codesandbox)](https://codesandbox.io/p/sandbox/github/jaiganesh6999/seowebchecker-seoaudit-sdk/tree/main/examples/codesandbox)
+[![Flowise](https://img.shields.io/badge/Flowise%20AI-Custom%20Tool-6366F1.svg)](./integrations/flowise)
+[![Langflow](https://img.shields.io/badge/Langflow-Component-10B981.svg)](./integrations/langflow)
+[![Poetry](https://img.shields.io/badge/Poetry-Compatible-60A5FA.svg?logo=poetry)](https://python-poetry.org/)
+[![Fly.io](https://img.shields.io/badge/Fly.io-Live%20Deployment-24185B.svg?logo=flydotio)](https://fly.io/)
+[![Raku.land](https://img.shields.io/badge/Raku.land-SEO%3A%3AWebChecker-blue.svg)](https://raku.land/zef:jaiganesh6999/SEO::WebChecker)](https://fly.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![SEOWebChecker](https://img.shields.io/badge/Official%20Site-seowebchecker.com-indigo)](https://seowebchecker.com/)
 
@@ -61,11 +74,13 @@ Official documentation: **[https://seo-ai-tools.readthedocs.io/en/latest/](https
 | **[NuGet](https://nuget.org)** | .NET / C# | `SeoWebChecker.SeoAudit` | [`dotnet/`](./dotnet) |
 | **[Packagist](https://packagist.org)** | PHP 8.2+ | `seowebchecker/seoaudit-sdk` | [`php/`](./php) |
 | **[CPAN](https://metacpan.org)** | Perl 5 | `SeoWebChecker::SeoAudit` | [`perl/`](./perl) |
+| **[Raku.land (Fez / Zef)](https://raku.land)** | Raku | `SEO::WebChecker` | [`raku/`](./raku) |
 | **[Crates.io](https://crates.io)** | Rust | `seowebchecker-seoaudit-sdk` | [`rust/`](./rust) |
 | **[Hackage](https://hackage.haskell.org)** | Haskell | `seowebchecker` | [`haskell/`](./haskell) |
 | **[JuliaHub](https://juliahub.com)** | Julia 1.6+ | `SeoWebCheckerAudit` | [`julia/`](./julia) |
 | **[Clojars](https://clojars.org)** | Clojure / JVM | `net.clojars.seoaitools/seowebchecker-seoaudit-sdk` | [`clojure/`](./clojure) |
 | **[Bower](https://bower.io)** | Front-End & Web Assets | `seowebchecker` (`jaiganesh6999/seowebchecker-seoaudit-sdk`) | [Root (`./bower.json`)](./bower.json) |
+| **[PureScript Registry & Pursuit](https://pursuit.purescript.org/)** | PureScript (0.15+) | `seowebchecker` | [Root (`./spago.yaml`)](./spago.yaml) |
 | **[Swift Package Index](https://swiftpackageindex.com/jaiganesh6999/seowebchecker-seoaudit-sdk)** | Swift & Apple Platforms (SPM) | `SeoWebChecker` | [Root (`./Package.swift`)](./Package.swift) |
 | **[Vite](https://vite.dev)** | Frontend Build Tool (Plugin) | `vite-plugin-seowebchecker` | [`vite/`](./vite) |
 | **[JitPack](https://jitpack.io/#jaiganesh6999/seowebchecker-seoaudit-sdk)** | Java / Android / JVM | `com.github.jaiganesh6999.seowebchecker-seoaudit-sdk:seowebchecker-seoaudit-sdk` | [`java/`](./java) |
@@ -90,8 +105,18 @@ Official documentation: **[https://seo-ai-tools.readthedocs.io/en/latest/](https
 | **[LlamaIndex / LlamaHub](https://github.com/run-llama/llama_index/pull/23306)** | AI Data Framework & Tool Registry | `llama-index-tools-seowebchecker` | [`integrations/llamaindex/`](./integrations/llamaindex) |
 | **[Atmosphere (Meteor.js)](https://atmospherejs.com/)** | Full-Stack JavaScript & Meteor | `seowebchecker:seoaudit-sdk` | [`meteor/`](./meteor) |
 | **[Postman Public API Network](https://www.postman.com/)** | API Collections & Testing | `SEOWebChecker` | [`postman/`](./postman) |
-
-*Step-by-step instructions for building and publishing to all 45 registries are in **[PUBLISHING_GUIDE.md](./PUBLISHING_GUIDE.md)**.*
+| **[WordPress Plugin Directory](https://wordpress.org/plugins/)** | CMS & Digital Publishing | `seowebchecker` | [`wordpress/`](./wordpress) |
+| **[Visual Studio Code Marketplace](https://marketplace.visualstudio.com/)** | Developer IDE & Editor (VS Code) | `seowebchecker` | [`vscode/`](./vscode) |
+| **[Astro Integrations](https://astro.build/integrations)** | Astro Modern Web Framework | [`astro-seowebchecker`](https://www.npmjs.com/package/astro-seowebchecker) | [`astro/`](./astro) |
+| **[Artifact Hub (Helm)](https://artifacthub.io/)** | Kubernetes & Cloud-Native (Helm) | `seowebchecker` | [`helm/`](./helm) |
+| **[Drupal Projects](https://www.drupal.org/project/project_module)** | Enterprise CMS (Drupal 10 & 11) | `seowebchecker` | [`drupal/`](./drupal) |
+| **[Joomla Extensions Directory (JED)](https://extensions.joomla.org/)** | Open-Source Web Publishing (Joomla 5) | `plg_system_seowebchecker` | [`joomla/`](./joomla) |
+| **[StackBlitz](https://stackblitz.com/)** | Instant Browser Dev Environment & Playground | `seowebchecker-stackblitz-starter` | [`examples/stackblitz/`](./examples/stackblitz) |
+| **[CodeSandbox](https://codesandbox.io/)** | Cloud Sandbox & Interactive Browser Micro-VM | `seowebchecker-codesandbox-demo` | [`examples/codesandbox/`](./examples/codesandbox) |
+| **[Flowise AI](https://flowiseai.com/)** | Visual LLM Agents & Flowise Custom Node Tool | `seowebcheckerAudit` | [`integrations/flowise/`](./integrations/flowise) |
+| **[Langflow](https://www.langflow.org/)** | Open-Source Visual Agent Framework & Custom Component | `SEOWebCheckerAudit` | [`integrations/langflow/`](./integrations/langflow) |
+| **[Poetry](https://python-poetry.org/)** | Python Packaging & Dependency Management | `seowebchecker-seoaudit-sdk` | [`python/`](./python) |
+| **[Fly.io](https://fly.io/)** | Global Edge Micro-VMs & Cloud Deployment | `seowebchecker-seoaudit` | [`fly.toml`](./fly.toml) |
 
 ---
 
