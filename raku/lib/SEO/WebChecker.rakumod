@@ -1,5 +1,15 @@
 unit class SEO::WebChecker:ver<1.0.0>:auth<zef:jaiganesh6999>;
 
+sub escape-json(Str $val --> Str) {
+    my $s = $val // '';
+    $s = $s.subst('\\', '\\\\', :g);
+    $s = $s.subst('"', '\"', :g);
+    $s = $s.subst("\n", '\n', :g);
+    $s = $s.subst("\r", '\r', :g);
+    $s = $s.subst("\t", '\t', :g);
+    return $s;
+}
+
 #| Encapsulates the complete result of an on-page technical SEO audit.
 class Result {
     has Str $.url is rw;
@@ -49,36 +59,60 @@ class Result {
     }
 
     method to-json(--> Str) {
-        my @issue-strs = @.issues.map({
-            qq|\{"id":"{$_<id>}","category":"{$_<category>}","severity":"{$_<severity>}","title":"{$_<title>}","message":"{$_<message>}","recommendation":"{$_<recommendation>}"\}|
-        });
-        my @pass-strs = @.passes.map({
-            qq|\{"id":"{$_<id>}","category":"{$_<category>}","severity":"{$_<severity>}","title":"{$_<title>}","message":"{$_<message>}","recommendation":"{$_<recommendation>}"\}|
-        });
-        my @h1-strs = @.h1-tags.map({ qq|"{$_}"| });
+        my $esc-title = escape-json($.title);
+        my $esc-desc  = escape-json($.meta-description);
+        my $esc-canon = escape-json($.canonical-url);
+        my $esc-url   = escape-json($.url);
 
-        return qq|{\n|
-            ~ qq|  "url": "$.url",\n|
-            ~ qq|  "score": $.score,\n|
-            ~ qq|  "grade": "$.grade",\n|
-            ~ qq|  "status": "$.status",\n|
-            ~ qq|  "title": "{$.title.subst(/"/, '\\"', :g)}",\n|
-            ~ qq|  "titleLength": $.title-length,\n|
-            ~ qq|  "metaDescription": "{$.meta-description.subst(/"/, '\\"', :g)}",\n|
-            ~ qq|  "metaDescriptionLength": $.meta-description-length,\n|
-            ~ qq|  "hasViewport": {$.has-viewport ?? 'true' !! 'false'},\n|
-            ~ qq|  "hasCanonical": {$.has-canonical ?? 'true' !! 'false'},\n|
-            ~ qq|  "canonicalUrl": "$.canonical-url",\n|
-            ~ qq|  "isHttps": {$.is-https ?? 'true' !! 'false'},\n|
-            ~ qq|  "h1Count": $.h1-count,\n|
-            ~ qq|  "h1Tags": [{ @h1-strs.join(', ') }],\n|
-            ~ qq|  "wordCount": $.word-count,\n|
-            ~ qq|  "responseTimeMs": $.response-time-ms,\n|
-            ~ qq|  "issues": [{ @issue-strs.join(', ') }],\n|
-            ~ qq|  "passes": [{ @pass-strs.join(', ') }],\n|
-            ~ qq|  "platformUrl": "https://seowebchecker.com/",\n|
-            ~ qq|  "timestamp": "$.timestamp"\n|
-            ~ qq|}|;
+        my @issue-parts = @.issues.map({
+            my $id  = escape-json($_<id>);
+            my $cat = escape-json($_<category>);
+            my $sev = escape-json($_<severity>);
+            my $tit = escape-json($_<title>);
+            my $msg = escape-json($_<message>);
+            my $rec = escape-json($_<recommendation>);
+            '{"id":"' ~ $id ~ '","category":"' ~ $cat ~ '","severity":"' ~ $sev ~ '","title":"' ~ $tit ~ '","message":"' ~ $msg ~ '","recommendation":"' ~ $rec ~ '"}'
+        });
+
+        my @pass-parts = @.passes.map({
+            my $id  = escape-json($_<id>);
+            my $cat = escape-json($_<category>);
+            my $sev = escape-json($_<severity>);
+            my $tit = escape-json($_<title>);
+            my $msg = escape-json($_<message>);
+            my $rec = escape-json($_<recommendation>);
+            '{"id":"' ~ $id ~ '","category":"' ~ $cat ~ '","severity":"' ~ $sev ~ '","title":"' ~ $tit ~ '","message":"' ~ $msg ~ '","recommendation":"' ~ $rec ~ '"}'
+        });
+
+        my @h1-parts = @.h1-tags.map({ '"' ~ escape-json($_) ~ '"' });
+
+        my $vp = $.has-viewport ?? 'true' !! 'false';
+        my $cn = $.has-canonical ?? 'true' !! 'false';
+        my $sc = $.is-https ?? 'true' !! 'false';
+
+        my $out = "{\n";
+        $out ~= '  "url": "' ~ $esc-url ~ "\",\n";
+        $out ~= '  "score": ' ~ $.score ~ ",\n";
+        $out ~= '  "grade": "' ~ $.grade ~ "\",\n";
+        $out ~= '  "status": "' ~ $.status ~ "\",\n";
+        $out ~= '  "title": "' ~ $esc-title ~ "\",\n";
+        $out ~= '  "titleLength": ' ~ $.title-length ~ ",\n";
+        $out ~= '  "metaDescription": "' ~ $esc-desc ~ "\",\n";
+        $out ~= '  "metaDescriptionLength": ' ~ $.meta-description-length ~ ",\n";
+        $out ~= '  "hasViewport": ' ~ $vp ~ ",\n";
+        $out ~= '  "hasCanonical": ' ~ $cn ~ ",\n";
+        $out ~= '  "canonicalUrl": "' ~ $esc-canon ~ "\",\n";
+        $out ~= '  "isHttps": ' ~ $sc ~ ",\n";
+        $out ~= '  "h1Count": ' ~ $.h1-count ~ ",\n";
+        $out ~= '  "h1Tags": [' ~ @h1-parts.join(', ') ~ "],\n";
+        $out ~= '  "wordCount": ' ~ $.word-count ~ ",\n";
+        $out ~= '  "responseTimeMs": ' ~ $.response-time-ms ~ ",\n";
+        $out ~= '  "issues": [' ~ @issue-parts.join(', ') ~ "],\n";
+        $out ~= '  "passes": [' ~ @pass-parts.join(', ') ~ "],\n";
+        $out ~= '  "platformUrl": "https://seowebchecker.com/",' ~ "\n";
+        $out ~= '  "timestamp": "' ~ $.timestamp ~ "\"\n";
+        $out ~= "}";
+        return $out;
     }
 
     method to-markdown(--> Str) {
@@ -89,11 +123,11 @@ class Result {
         $md ~= "|:---|:---|\n";
         $md ~= "| **SEO Health Score** | **$.score / 100** ({$.grade}) |\n";
         $md ~= "| **Audit Status** | **$.status** |\n";
-        $md ~= "| **HTTPS Secure** | {$.is-https ?? 'Yes' !! 'No'} |\n";
-        $md ~= "| **Title Tag** | {$.title || '[Missing]'} ({$.title-length} chars) |\n";
-        $md ~= "| **Meta Description** | {$.meta-description || '[Missing]'} ({$.meta-description-length} chars) |\n";
-        $md ~= "| **Mobile Viewport** | {$.has-viewport ?? 'Configured' !! 'Missing'} |\n";
-        $md ~= "| **Canonical Tag** | {$.has-canonical ?? $.canonical-url !! 'Missing'} |\n";
+        $md ~= "| **HTTPS Secure** | " ~ ($.is-https ?? 'Yes' !! 'No') ~ " |\n";
+        $md ~= "| **Title Tag** | " ~ ($.title || '[Missing]') ~ " ({$.title-length} chars) |\n";
+        $md ~= "| **Meta Description** | " ~ ($.meta-description || '[Missing]') ~ " ({$.meta-description-length} chars) |\n";
+        $md ~= "| **Mobile Viewport** | " ~ ($.has-viewport ?? 'Configured' !! 'Missing') ~ " |\n";
+        $md ~= "| **Canonical Tag** | " ~ ($.has-canonical ?? $.canonical-url !! 'Missing') ~ " |\n";
         $md ~= "| **Primary H1** | {$.h1-count} tag(s) found |\n";
         $md ~= "| **Word Count** | {$.word-count} words |\n\n";
 
@@ -200,8 +234,8 @@ method audit-html(Str $html, Str :$url = 'https://seowebchecker.com/', Num :$res
     }
 
     # 2. Meta Description
-    if $html ~~ m:i/ '<meta' \s+ <-[>]>*? name=[\"|\']description[\"|\'] <-[>]>*? content=[\"|\'] (<-[\"|\']>*) [\"|\'] /
-       || $html ~~ m:i/ '<meta' \s+ <-[>]>*? content=[\"|\'] (<-[\"|\']>*) [\"|\'] <-[>]>*? name=[\"|\']description[\"|\'] / {
+    if $html ~~ m:i/ '<meta' \s+ <-[>]>*? 'name=' <["']> 'description' <["']> <-[>]>*? 'content=' <["']> (<-["']>*) <["']> /
+       || $html ~~ m:i/ '<meta' \s+ <-[>]>*? 'content=' <["']> (<-["']>*) <["']> <-[>]>*? 'name=' <["']> 'description' <["']> / {
         $res.meta-description = ~$0.trim;
         $res.meta-description-length = $res.meta-description.chars;
     }
@@ -236,7 +270,7 @@ method audit-html(Str $html, Str :$url = 'https://seowebchecker.com/', Num :$res
     }
 
     # 3. Mobile Viewport
-    if $html ~~ m:i/ '<meta' \s+ <-[>]>*? name=[\"|\']viewport[\"|\'] / {
+    if $html ~~ m:i/ '<meta' \s+ <-[>]>*? 'name=' <["']> 'viewport' <["']> / {
         $res.has-viewport = True;
         @passes.push({
             id => 'meta-viewport-pass',
@@ -258,8 +292,8 @@ method audit-html(Str $html, Str :$url = 'https://seowebchecker.com/', Num :$res
     }
 
     # 4. Canonical Tag
-    if $html ~~ m:i/ '<link' \s+ <-[>]>*? rel=[\"|\']canonical[\"|\'] <-[>]>*? href=[\"|\'] (<-[\"|\']>*) [\"|\'] /
-       || $html ~~ m:i/ '<link' \s+ <-[>]>*? href=[\"|\'] (<-[\"|\']>*) [\"|\'] <-[>]>*? rel=[\"|\']canonical[\"|\'] / {
+    if $html ~~ m:i/ '<link' \s+ <-[>]>*? 'rel=' <["']> 'canonical' <["']> <-[>]>*? 'href=' <["']> (<-["']>*) <["']> /
+       || $html ~~ m:i/ '<link' \s+ <-[>]>*? 'href=' <["']> (<-["']>*) <["']> <-[>]>*? 'rel=' <["']> 'canonical' <["']> / {
         $res.has-canonical = True;
         $res.canonical-url = ~$0.trim;
         @passes.push({
