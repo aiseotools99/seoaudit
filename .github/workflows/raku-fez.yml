@@ -32,10 +32,10 @@ jobs:
       - name: Install Fez Distribution Manager
         run: zef install fez
 
-      - name: Check Distribution Build
+      - name: Review Distribution
         run: |
           cd raku
-          fez checkbuild
+          fez review
 
       - name: Configure Fez Credentials & Publish to Raku.land
         if: env.FEZ_KEY != ''
@@ -50,5 +50,8 @@ jobs:
             "key": "$FEZ_KEY"
           }
           EOF
+          cp ~/.fez-config.json ~/.fez/config.json
+          chmod 600 ~/.fez-config.json ~/.fez/config.json
+          export FEZ_CONFIG=~/.fez-config.json
           cd raku
           fez upload
