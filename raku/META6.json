@@ -23,7 +23,9 @@
     "crawler",
     "seowebchecker"
   ],
-  "depends": [],
+  "depends": [
+    "JSON::Fast"
+  ],
   "provides": {
     "SEO::WebChecker": "lib/SEO/WebChecker.rakumod"
   },

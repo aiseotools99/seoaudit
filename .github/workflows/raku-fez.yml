@@ -11,6 +11,8 @@ on:
 jobs:
   test-and-publish:
     runs-on: ubuntu-latest
+    env:
+      FEZ_KEY: ${{ secrets.FEZ_KEY }}
 
     steps:
       - name: Checkout Repository
