@@ -42,6 +42,6 @@ jobs:
             exit 0
           fi
 
-          echo "Publishing seoaudit-seowebchecker-1.0.0.tar.gz to Ansible Galaxy..."
-          ansible-galaxy collection publish ansible/pkg/seoaudit-seowebchecker-1.0.0.tar.gz --api-key "$GALAXY_API_KEY"
+          echo "Publishing jaiganesh6999-seowebchecker-1.0.0.tar.gz to Ansible Galaxy..."
+          ansible-galaxy collection publish ansible/pkg/jaiganesh6999-seowebchecker-1.0.0.tar.gz --api-key "$GALAXY_API_KEY"
           echo "Successfully published to Ansible Galaxy!"

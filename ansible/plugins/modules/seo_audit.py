@@ -64,7 +64,7 @@ seealso:
 
 EXAMPLES = r'''
 - name: Audit technical SEO health for production site
-  seoaudit.seowebchecker.seo_audit:
+  jaiganesh6999.seowebchecker.seo_audit:
     url: "https://seowebchecker.com/"
     min_score: 90
     fail_on_alert: true
@@ -75,7 +75,7 @@ EXAMPLES = r'''
     msg: "Score: {{ audit_result.score }} ({{ audit_result.grade }}) - Status: {{ audit_result.status }}"
 
 - name: Non-failing audit for staging environment
-  seoaudit.seowebchecker.seo_audit:
+  jaiganesh6999.seowebchecker.seo_audit:
     url: "https://staging.example.com/"
     min_score: 80
     fail_on_alert: false

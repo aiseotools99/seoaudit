@@ -1,6 +1,6 @@
 ---
 - name: Execute on-page technical SEO audit quality gate
-  seoaudit.seowebchecker.seo_audit:
+  jaiganesh6999.seowebchecker.seo_audit:
     url: "{{ seo_quality_gate_url }}"
     min_score: "{{ seo_quality_gate_min_score }}"
     fail_on_alert: "{{ seo_quality_gate_fail_on_alert }}"

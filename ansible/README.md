@@ -1,6 +1,6 @@
-# seoaudit.seowebchecker Ansible Collection
+# jaiganesh6999.seowebchecker Ansible Collection
 
-[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-seoaudit.seowebchecker-blue.svg)](https://galaxy.ansible.com/ui/repo/published/seoaudit/seowebchecker/)
+[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-jaiganesh6999.seowebchecker-blue.svg)](https://galaxy.ansible.com/ui/repo/published/jaiganesh6999/seowebchecker/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-https%3A%2F%2Fseowebchecker.com%2F-brightgreen)](https://seowebchecker.com/)
 
@@ -12,9 +12,9 @@ A production-grade Ansible Collection for automated technical SEO audits, deploy
 
 Modern web deployments require continuous validation that on-page SEO elements, mobile responsiveness, and security protocols are not broken during updates.
 
-The **`seoaudit.seowebchecker`** collection provides:
+The **`jaiganesh6999.seowebchecker`** collection provides:
 
-- 🔍 **`seoaudit.seowebchecker.seo_audit`**: Native Ansible action module that audits any live URL or staging endpoint directly within your playbooks.
+- 🔍 **`jaiganesh6999.seowebchecker.seo_audit`**: Native Ansible action module that audits any live URL or staging endpoint directly within your playbooks.
 - 🚦 **Quality Gate Enforcement**: Fails deployment playbooks if a release drops below your target SEO score (e.g. `min_score: 85`).
 - 🤖 **`roles/agent`**: Automatically provisions scheduled audit cron jobs and report directories across your web server fleet.
 - 🛡️ **`roles/quality_gate`**: Reusable quality gate role for pre-traffic cutover verification.
@@ -27,7 +27,7 @@ The **`seoaudit.seowebchecker`** collection provides:
 Install via the `ansible-galaxy` CLI:
 
 ```bash
-ansible-galaxy collection install seoaudit.seowebchecker
+ansible-galaxy collection install jaiganesh6999.seowebchecker
 ```
 
 Or declare it in your `requirements.yml`:
@@ -35,7 +35,7 @@ Or declare it in your `requirements.yml`:
 ```yaml
 ---
 collections:
-  - name: seoaudit.seowebchecker
+  - name: jaiganesh6999.seowebchecker
     version: ">=1.0.0"
 ```
 
@@ -56,7 +56,7 @@ ansible-galaxy collection install -r requirements.yml
   connection: local
   tasks:
     - name: Audit staging URL
-      seoaudit.seowebchecker.seo_audit:
+      jaiganesh6999.seowebchecker.seo_audit:
         url: "https://seowebchecker.com/"
         min_score: 90
         fail_on_alert: true
@@ -73,7 +73,7 @@ ansible-galaxy collection install -r requirements.yml
   hosts: localhost
   tasks:
     - name: Audit website
-      seoaudit.seowebchecker.seo_audit:
+      jaiganesh6999.seowebchecker.seo_audit:
         url: "https://seowebchecker.com/"
         min_score: 80
         fail_on_alert: false
@@ -114,13 +114,13 @@ ansible-galaxy collection install -r requirements.yml
 
 ## Roles Included
 
-### 1. `seoaudit.seowebchecker.agent`
+### 1. `jaiganesh6999.seowebchecker.agent`
 Configures cron jobs and reporting paths on web hosts for periodic SEO monitoring:
 
 ```yaml
 - hosts: webservers
   roles:
-    - role: seoaudit.seowebchecker.agent
+    - role: jaiganesh6999.seowebchecker.agent
       vars:
         seowebchecker_sites:
           - name: "corporate_site"
@@ -130,13 +130,13 @@ Configures cron jobs and reporting paths on web hosts for periodic SEO monitorin
             cron_minute: "0"
 ```
 
-### 2. `seoaudit.seowebchecker.quality_gate`
+### 2. `jaiganesh6999.seowebchecker.quality_gate`
 Reusable pre-deployment verification gate:
 
 ```yaml
 - hosts: localhost
   roles:
-    - role: seoaudit.seowebchecker.quality_gate
+    - role: jaiganesh6999.seowebchecker.quality_gate
       vars:
         seo_quality_gate_url: "https://seowebchecker.com/"
         seo_quality_gate_min_score: 90

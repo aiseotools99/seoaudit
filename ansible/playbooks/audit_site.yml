@@ -9,7 +9,7 @@
 
   tasks:
     - name: Run SEOWebChecker Audit
-      seoaudit.seowebchecker.seo_audit:
+      jaiganesh6999.seowebchecker.seo_audit:
         url: "{{ target_url }}"
         min_score: "{{ min_score }}"
         fail_on_alert: true
