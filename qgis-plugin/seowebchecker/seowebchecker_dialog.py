@@ -134,7 +134,7 @@ class SEOWebCheckerDialog(QDialog):
             for layer in QgsProject.instance().mapLayers().values():
                 if isinstance(layer, QgsVectorLayer):
                     self.layer_combo.addItem(layer.name(), layer)
-        except Exception:
+        except (AttributeError, RuntimeError, TypeError):
             pass
 
     def populate_fields(self):

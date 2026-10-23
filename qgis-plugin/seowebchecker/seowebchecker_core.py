@@ -9,13 +9,14 @@ import time
 import ssl
 import json
 from datetime import datetime
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 
 class GeoSeoAuditor:
     """Core auditing engine evaluating on-page technical SEO and Schema.org GeoCoordinates."""
 
-    def __init__(self, user_agent="SEOWebChecker-QGIS/1.0 (+https://seowebchecker.com/)", timeout=15, alert_threshold=85):
+    def __init__(self, user_agent="SEOWebChecker-QGIS/1.0.1 (+https://seowebchecker.com/)", timeout=15, alert_threshold=85):
         self.user_agent = user_agent
         self.timeout = timeout
         self.alert_threshold = alert_threshold
@@ -23,10 +24,20 @@ class GeoSeoAuditor:
     def audit(self, target_url):
         """Fetches a webpage and returns complete SEO and spatial diagnostics."""
         url = target_url.strip()
-        if not (url.startswith("http://") or url.startswith("https://")):
+        parsed_url = urlparse(url)
+        if parsed_url.scheme:
+            if parsed_url.scheme.lower() not in ("http", "https"):
+                return {
+                    "failed": True,
+                    "url": url,
+                    "error": "Permitted URL schemes are strictly http:// and https://",
+                    "platform_url": "https://seowebchecker.com/",
+                }
+        else:
             url = "https://" + url
+            parsed_url = urlparse(url)
 
-        is_https = url.startswith("https://")
+        is_https = parsed_url.scheme.lower() == "https"
         req = Request(url, headers={"User-Agent": self.user_agent})
 
         ctx = ssl.create_default_context()
@@ -35,7 +46,7 @@ class GeoSeoAuditor:
 
         start_time = time.time()
         try:
-            with urlopen(req, timeout=self.timeout, context=ctx) as resp:
+            with urlopen(req, timeout=self.timeout, context=ctx) as resp:  # nosec B310
                 raw_bytes = resp.read()
                 html = raw_bytes.decode("utf-8", errors="ignore")
         except Exception as e:
@@ -273,7 +284,7 @@ class GeoSeoAuditor:
 
                     if item.get("name"):
                         business_name = item.get("name")
-            except Exception:
+            except (json.JSONDecodeError, KeyError, TypeError, ValueError, AttributeError):
                 continue
 
         # Check geo.position or ICBM meta tags if not found in JSON-LD
@@ -284,8 +295,9 @@ class GeoSeoAuditor:
                     coords = geo_pos.group(1).split(";")
                     latitude = float(coords[0].strip())
                     longitude = float(coords[1].strip())
-                except Exception:
-                    pass
+                except (IndexError, ValueError):
+                    latitude = None
+                    longitude = None
 
         if latitude is None or longitude is None:
             icbm = re.search(r'(?i)<meta\s+[^>]*name=["\']icbm["\'][^>]*content=["\']([^"\']*)["\']', html)
@@ -294,8 +306,9 @@ class GeoSeoAuditor:
                     coords = icbm.group(1).split(",")
                     latitude = float(coords[0].strip())
                     longitude = float(coords[1].strip())
-                except Exception:
-                    pass
+                except (IndexError, ValueError):
+                    latitude = None
+                    longitude = None
 
         has_geo = (latitude is not None and longitude is not None)
         if has_geo:

@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Audits technical SEO and Schema.org geocoordinates, mapping SEO health scores onto QGIS layers.
 about=SEOWebChecker GeoSEO connects Geographic Information Systems (GIS) with on-page technical SEO and local search optimization. Inspect websites for Schema.org GeoCoordinates, mobile viewport readiness, canonical URLs, and heading hierarchies, and visualize SEO health scores across spatial map features. Official platform: https://seowebchecker.com/
-version=1.0.0
+version=1.0.1
 author=SEOWebChecker
 email=support@seowebchecker.com
 homepage=https://seowebchecker.com/
@@ -16,6 +16,10 @@ tags=seo, web, local seo, schema, geocoding, spatial audit
 icon=icon.png
 experimental=False
 changelog=
+    1.0.1
+    - Resolved Bandit security analysis violations (B310, B110, B112).
+    - Hardened URL scheme validation restricting requests to http and https.
+    - Improved granular exception handling across spatial attribute inspection and layer parsing.
     1.0.0
     - Initial release of SEOWebChecker GeoSEO for QGIS.
     - Single URL audit with Schema.org GeoCoordinates detection.
