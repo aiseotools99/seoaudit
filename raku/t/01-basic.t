@@ -21,6 +21,7 @@ my $html = q:to/END/;
 <body>
   <h1>Technical SEO Audit Tool</h1>
   <p>Here is an informative paragraph with sufficient words describing our SEO audit tool and on-page analyzer in detail to verify that word count checks pass reliably without triggering thin content warnings on test runs. We ensure that our comprehensive evaluation accurately assesses on-page optimization, content volume, mobile readiness, and heading hierarchies to provide search engines with complete indexation clarity and maximum visibility across all modern web properties and platforms.</p>
+  <p>In addition, technical audits must evaluate meta descriptions, canonical declarations, document titles, schema metadata, performance metrics, and accessibility indicators to help web developers and site owners optimize organic user experience, crawl budgets, indexing efficiency, and overall search visibility.</p>
 </body>
 </html>
 END
