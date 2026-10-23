@@ -1,7 +1,7 @@
 # SEOWebChecker 3D Web Optimizer & SEO Auditor
 
 [![Blender Extensions](https://img.shields.io/badge/Blender-Extension%204.2%2B-orange.svg?logo=blender&logoColor=white)](https://extensions.blender.org/)
-[![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](LICENSE)
+[![License: GPL v3+](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-https%3A%2F%2Fseowebchecker.com%2F-brightgreen)](https://seowebchecker.com/)
 
 A specialized Blender extension designed for 3D web artists, WebGL developers, and digital marketers to optimize 3D assets for **Web3D search visibility**, **Google 3D Search**, and **Core Web Vitals** performance. Powered by [SEOWebChecker](https://seowebchecker.com/).
@@ -97,4 +97,4 @@ Blender 4.2+ requires explicit declaration of permissions:
 
 ## License
 
-GNU General Public License v2.0 or later (SPDX: GPL-2.0-or-later).
+GNU General Public License v3.0 or later (SPDX: GPL-3.0-or-later).
