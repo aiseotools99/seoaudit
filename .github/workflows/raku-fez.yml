@@ -1,0 +1,44 @@
+name: Raku Fez Publish (raku.land)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'raku/**'
+      - '.github/workflows/raku-fez.yml'
+  workflow_dispatch:
+
+jobs:
+  test-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Raku & Zef
+        uses: Raku/setup-raku@v1
+        with:
+          raku-version: 'latest'
+
+      - name: Install Dependencies & Test
+        run: |
+          cd raku
+          zef install --deps-only .
+          zef test .
+
+      - name: Install Fez Distribution Manager
+        run: zef install fez
+
+      - name: Check Distribution Build
+        run: |
+          cd raku
+          fez checkbuild
+
+      - name: Publish to Raku.land via Fez
+        if: env.FEZ_KEY != ''
+        env:
+          FEZ_KEY: ${{ secrets.FEZ_KEY }}
+        run: |
+          cd raku
+          fez upload

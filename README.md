@@ -43,6 +43,7 @@
 [![Langflow](https://img.shields.io/badge/Langflow-Component-10B981.svg)](./integrations/langflow)
 [![Poetry](https://img.shields.io/badge/Poetry-Compatible-60A5FA.svg?logo=poetry)](https://python-poetry.org/)
 [![Fly.io](https://img.shields.io/badge/Fly.io-Live%20Deployment-24185B.svg?logo=flydotio)](https://fly.io/)
+[![Raku.land](https://img.shields.io/badge/Raku.land-SEO%3A%3AWebChecker-blue.svg)](https://raku.land/zef:jaiganesh6999/SEO::WebChecker)](https://fly.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![SEOWebChecker](https://img.shields.io/badge/Official%20Site-seowebchecker.com-indigo)](https://seowebchecker.com/)
 
@@ -73,6 +74,7 @@ Official documentation: **[https://seo-ai-tools.readthedocs.io/en/latest/](https
 | **[NuGet](https://nuget.org)** | .NET / C# | `SeoWebChecker.SeoAudit` | [`dotnet/`](./dotnet) |
 | **[Packagist](https://packagist.org)** | PHP 8.2+ | `seowebchecker/seoaudit-sdk` | [`php/`](./php) |
 | **[CPAN](https://metacpan.org)** | Perl 5 | `SeoWebChecker::SeoAudit` | [`perl/`](./perl) |
+| **[Raku.land (Fez / Zef)](https://raku.land)** | Raku | `SEO::WebChecker` | [`raku/`](./raku) |
 | **[Crates.io](https://crates.io)** | Rust | `seowebchecker-seoaudit-sdk` | [`rust/`](./rust) |
 | **[Hackage](https://hackage.haskell.org)** | Haskell | `seowebchecker` | [`haskell/`](./haskell) |
 | **[JuliaHub](https://juliahub.com)** | Julia 1.6+ | `SeoWebCheckerAudit` | [`julia/`](./julia) |
