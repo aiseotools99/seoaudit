@@ -289,9 +289,9 @@ method audit-html(Str $html, Str :$url = 'https://seowebchecker.com/', Num :$res
     }
 
     # 6. Word Count
-    my $clean-text = $html.subst(m:i/ '<script' <-[>]>* '>' .*? '</script>' /, ' ', :g);
-    $clean-text = $clean-text.subst(m:i/ '<style' <-[>]>* '>' .*? '</style>' /, ' ', :g);
-    $clean-text = $clean-text.subst(/ '<' <-[>]>* '>' /, ' ', :g);
+    my $clean-text = $html.subst(rx:i/ '<script' <-[>]>* '>' .*? '</script>' /, ' ', :g);
+    $clean-text = $clean-text.subst(rx:i/ '<style' <-[>]>* '>' .*? '</style>' /, ' ', :g);
+    $clean-text = $clean-text.subst(rx/ '<' <-[>]>* '>' /, ' ', :g);
     my @words = $clean-text.words;
     $res.word-count = @words.elems;
 
