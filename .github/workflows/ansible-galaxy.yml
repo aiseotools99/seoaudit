@@ -31,6 +31,7 @@ jobs:
       - name: Build Ansible Collection
         run: |
           cd ansible
+          rm -rf pkg/*.tar.gz
           ansible-galaxy collection build --force --output-path pkg/
           ls -la pkg/
 
@@ -42,6 +43,7 @@ jobs:
             exit 0
           fi
 
-          echo "Publishing jaiganesh6999-seowebchecker-1.0.0.tar.gz to Ansible Galaxy..."
-          ansible-galaxy collection publish ansible/pkg/jaiganesh6999-seowebchecker-1.0.0.tar.gz --api-key "$GALAXY_API_KEY"
+          TARBALL=$(ls ansible/pkg/jaiganesh6999-seowebchecker-*.tar.gz | head -n 1)
+          echo "Publishing $TARBALL to Ansible Galaxy..."
+          ansible-galaxy collection publish "$TARBALL" --api-key "$GALAXY_API_KEY"
           echo "Successfully published to Ansible Galaxy!"
