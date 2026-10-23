@@ -39,17 +39,12 @@ jobs:
             exit 0
           fi
 
+          raku -e 'use Fez::Util::Config; my %c = user-config; %c<un> = "jaiganesh6999"; %c<key> = %*ENV<FEZ_KEY>; %c<groups> = []; write-to-user-config(%c);'
           mkdir -p ~/.fez
-          cat << EOF > ~/.fez-config.json
-          {
-            "groups": [],
-            "un": "jaiganesh6999",
-            "key": "$FEZ_KEY"
-          }
-          EOF
-          cp ~/.fez-config.json ~/.fez/config.json
-          chmod 600 ~/.fez-config.json ~/.fez/config.json
-          export FEZ_CONFIG=~/.fez-config.json
+          cp ~/.fez-config.json ~/.fez/config.json 2>/dev/null || true
+          chmod 600 ~/.fez-config.json ~/.fez/config.json 2>/dev/null || true
+          echo "Fez configuration successfully populated:"
+          cat ~/.fez-config.json | sed -E 's/"key": "[^"]+"/"key": "***"/'
           cd raku
           fez review
           fez upload
